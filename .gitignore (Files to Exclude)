@@ -1,0 +1,9 @@
+Environment
+venv/
+pycache/
+*.pyc
+
+Data & Reports
+resumes/
+hr_reports/
+*.csv
