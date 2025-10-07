@@ -1,0 +1,31 @@
+Job Title: Junior Data Scientist
+
+We are seeking a highly motivated and analytical Junior Data Scientist to join our dynamic team. The ideal candidate will be responsible for extracting valuable insights from large datasets and building machine learning models to solve complex business problems.
+
+Key Responsibilities:
+
+Data pre-processing, cleaning, and feature engineering.
+
+Developing and implementing machine learning algorithms, including Logistic Regression, Decision Trees, and K-Nearest Neighbors.
+
+Building and optimizing deep learning models, specifically using Convolutional Neural Networks (CNN) or Recurrent Neural Networks (RNN).
+
+Applying Natural Language Processing (NLP) techniques like tokenization and TF-IDF for text analysis.
+
+Evaluating model performance using metrics such as precision, recall, F1-score, and accuracy.
+
+Deploying models using frameworks like Flask or Streamlit.
+
+Required Skills and Tools:
+
+Programming: Proficient in Python.
+
+Libraries: Extensive experience with Pandas, Scikit-Learn (Sklearn), TensorFlow, Keras, and SpaCy.
+
+Data/SQL: Strong knowledge of SQL and data manipulation.
+
+Concepts: Understanding of the bias-variance trade-off, overfitting and underfitting, and ensemble models.
+
+Education:
+
+Bachelor's or Master's degree in Computer Science, Data Science, Statistics, or a related quantitative field.
