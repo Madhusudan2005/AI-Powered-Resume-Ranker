@@ -1,0 +1,64 @@
+from flask import Flask, render_template, request, redirect, url_for, send_file
+import os
+import pandas as pd
+import ranking_engine # Import the entire module
+import io
+
+# --- Flask Configuration ---
+app = Flask(__name__)
+
+# --- Directory Configuration ---
+JD_FILE = 'job_description.txt'
+RESUMES_DIR = 'resumes'
+HR_REPORTS_DIR = 'hr_reports' 
+
+# Ensure the HR reports directory exists
+if not os.path.exists(HR_REPORTS_DIR):
+    os.makedirs(HR_REPORTS_DIR)
+
+# --- Route 1: Home/Ranking View ---
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    # Run the core ranking logic
+    ranking_df = ranking_engine.get_ranking_results(JD_FILE, RESUMES_DIR)
+    
+    if 'Error' in ranking_df.columns:
+        # Pass the error message to the template
+        error_message = ranking_df.iloc[0]['Error']
+        return render_template('index.html', error=error_message, rankings=None)
+
+    # Convert the ranking DataFrame to HTML for display
+    # Round and add percentage sign for display purposes only
+    ranking_df['Match_Score'] = ranking_df['Match_Score'].round(2).astype(str) + '%'
+    
+    return render_template('index.html', 
+                           error=None, 
+                           rankings=ranking_df.to_html(classes='table table-striped table-hover', index=False))
+
+# --- Route 2: Download HR Report ---
+@app.route('/download', methods=['POST'])
+def download_report():
+    # Rerun the ranking to get the clean numerical score (without the % sign)
+    ranking_df = ranking_engine.get_ranking_results(JD_FILE, RESUMES_DIR)
+
+    if 'Error' in ranking_df.columns:
+        return redirect(url_for('index'))
+
+    # Save to an in-memory CSV file
+    csv_buffer = io.StringIO()
+    ranking_df['Match_Score'] = ranking_df['Match_Score'].round(2)
+    ranking_df.to_csv(csv_buffer, index=False)
+    csv_buffer.seek(0)
+    
+    # Return the CSV file to the user
+    return send_file(
+        io.BytesIO(csv_buffer.getvalue().encode('utf-8')),
+        mimetype='text/csv',
+        as_attachment=True,
+        download_name='HR_Resume_Ranking_Report.csv'
+    )
+
+if __name__ == '__main__':
+    # This block allows running the app directly via "python app.py"
+    print("\nStarting Flask web server...")
+    app.run(debug=True, host='127.0.0.1', port=5000)
